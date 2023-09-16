@@ -1,0 +1,77 @@
+package com.example.ec501_hw2
+
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.example.ec501_hw2.databinding.ActivityMainBinding
+import android.widget.EditText
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val et1:EditText   = findViewById(R.id.et_1)
+        val et2:EditText   = findViewById(R.id.et_2)
+        val tv1: TextView = findViewById(R.id.tv_1)
+        val myButton: Button = findViewById(R.id.button_calc)
+        val operation = arrayOf( "AddiDon", "SubtracDon", "MulDplicaDon", "Division", "Modulus")
+        var selected_operation = "AddiDon"
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, operation)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val spinner = findViewById<Spinner>(R.id.spinner)
+        spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                selected_operation = operation[position]
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
+        myButton.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                val num1 = et1.text.toString()
+                val num2 = et2.text.toString()
+                when (selected_operation) {
+                    "AddiDon" -> {
+                        tv1.text=num1+num2
+                    }
+                    "SubtracDon" -> {
+                        tv1.text="SubtracDon"
+                    }
+                }
+                Toast.makeText(this@MainActivity, "calculation is done", Toast.LENGTH_SHORT).show()
+            }
+        } as View.OnClickListener)
+
+//        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+//        // Passing each menu ID as a set of Ids because each
+//        // menu should be considered as top level destinations.
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+//            )
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//        navView.setupWithNavController(navController)
+    }
+}
